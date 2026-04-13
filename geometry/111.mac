@@ -1,0 +1,33 @@
+################################################################################
+# GEOMETRY
+################################################################################
+
+/musr/command rotation rotZ45 0 50 0
+
+
+/musr/command construct box World 1000 1000 1000 G4_AIR 0 0 0 no_logical_volume norot dead -1
+
+/musr/command construct box Det0 50 50 2 G4_Al 0 0 -40 log_World norot dead 1
+/musr/command construct box Det1 50 50 2 G4_Al 0 0 -20 log_World norot dead 2
+/musr/command construct box Det2 50 50 2 G4_Al 0 0  20 log_World norot dead 3
+/musr/command construct box Det3 50 50 2 G4_Al 0 0  40 log_World norot dead 4
+
+/musr/command construct tubs Targ 0 20 1 0 360 G4_Al 0 0 0 log_World rotZ45 dead 5
+
+################################################################################
+# VISUAL ATTRIBUTES
+################################################################################
+
+/musr/command visattributes log_World invisible
+/musr/command visattributes log_Det0 lightblue
+/musr/command visattributes log_Det1 lightblue
+/musr/command visattributes log_Det2 lightblue
+/musr/command visattributes log_Det3 lightblue
+/musr/command visattributes logTarg red
+
+################################################################################
+# INITIALIZE + VISUALIZE
+################################################################################
+
+/run/initialize
+/control/execute vis.mac

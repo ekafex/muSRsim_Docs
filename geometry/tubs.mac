@@ -1,0 +1,18 @@
+
+/musr/command construct box World 500 500 500 G4_AIR 0 0 0 no_logical_volume norot dead -1
+
+# /musr/command construct tubs MyTubs 20 30 30 20 270 G4_Al 0 0 0 log_World norot dead 1
+
+# Thin detector disks
+/musr/command construct tubs Det1 0 30 2 0 360 G4_Si 0 0 -30 log_World norot dead 10
+/musr/command construct tubs Det2 0 30 2 0 360 G4_Si 0 0   0 log_World norot dead 11
+/musr/command construct tubs Det3 0 30 2 0 360 G4_Si 0 0  30 log_World norot dead 12
+
+
+
+/musr/command visattributes log_World invisible
+/musr/command visattributes log_MyTubs lightblue
+
+/run/initialize
+/control/execute vis.mac
+

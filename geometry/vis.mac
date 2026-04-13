@@ -1,0 +1,9 @@
+/vis/open OGLIX 1000x800-0+0
+/vis/drawVolume
+#/vis/viewer/set/style wireframe 
+/vis/viewer/set/style surface
+/vis/viewer/set/autoRefresh true
+/vis/viewer/set/background black
+/vis/viewer/set/viewpointThetaPhi 90 90 deg
+/vis/viewer/flush
+

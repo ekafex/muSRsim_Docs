@@ -1,0 +1,9 @@
+/musr/command construct box World 300 300 300 G4_AIR 0 0 0 no_logical_volume norot dead -1
+
+/musr/command construct uprofile U1 25 10 120 3 G4_Al 0 0 0 log_World norot dead 1
+
+/musr/command visattributes log_World invisible
+/musr/command visattributes log_U1 lightblue
+
+/run/initialize
+/control/execute vis.mac

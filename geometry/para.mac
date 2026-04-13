@@ -1,0 +1,11 @@
+
+/musr/command construct box World 500 500 500 G4_AIR 0 0 0 no_logical_volume norot dead -1
+
+/musr/command construct para MyPara 20 20 20 20 0 0 G4_Al 0 0 0 log_World norot dead 1
+
+/musr/command visattributes log_World invisible
+/musr/command visattributes log_MyPara lightblue
+
+/run/initialize
+/control/execute vis.mac
+

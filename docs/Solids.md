@@ -114,10 +114,15 @@ These are **custom shapes** (less standardized, parameters follow internal imple
 ### **9. uprofile**
 
 ```text
-uprofile (custom parameters)
+uprofile x1 x2 x3 x4
 ```
 
-* U-shaped bar geometry
+U-shaped bar geometry
+
+* `x1` outer size in one transverse direction
+* `x2` outer size in the other transverse direction
+* `x3` full length of the bar
+* `x4` wall thickness. 
 
 ---
 

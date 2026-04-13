@@ -1,0 +1,18 @@
+/musr/command arrayDef zA   4  -50   0   50  100
+/musr/command arrayDef rin  4    5  10   10   20
+/musr/command arrayDef rout 4   10  30   20   40
+
+/musr/command arrayDef zB   8  -50   0   50  100  100   50   0  -50
+/musr/command arrayDef rB   8   10  30   20   40   20   10  10    5
+
+/musr/command construct box World 300 300 300 G4_AIR 0 0 0 no_logical_volume norot dead -1
+
+/musr/command construct polyconeA PolyA 50 260 4 zA rin rout G4_Al 0 0 0 log_World norot dead 1
+/musr/command construct polyconeB PolyB 50 260 8 rB zB G4_Cu 100 0 0 log_World norot dead 2
+
+/musr/command visattributes log_World invisible
+/musr/command visattributes log_PolyA lightblue
+/musr/command visattributes log_PolyB red
+
+/run/initialize
+/control/execute vis.mac
