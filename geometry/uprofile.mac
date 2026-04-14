@@ -1,9 +1,15 @@
 /musr/command construct box World 300 300 300 G4_AIR 0 0 0 no_logical_volume norot dead -1
 
-/musr/command construct uprofile U1 25 10 120 3 G4_Al 0 0 0 log_World norot dead 1
+/musr/command construct uprofile U1 25 10 50 7 G4_Al 0 0 0 log_World norot dead 1
+/musr/command construct box ProbeA 0.5 0.5 0.5 G4_Si 0 0 -50 log_U1 norot dead 101
+/musr/command construct box ProbeB 0.5 0.5 0.5 G4_Si 0 0  50 log_U1 norot dead 102
+
 
 /musr/command visattributes log_World invisible
 /musr/command visattributes log_U1 lightblue
+/musr/command visattributes log_ProbeA red
+/musr/command visattributes log_ProbeB red
+
 
 /run/initialize
 /control/execute vis.mac
