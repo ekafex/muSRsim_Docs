@@ -1,0 +1,10 @@
+/musr/command rotation rot0 0 0 0
+
+/musr/command construct box World 300 300 300 G4_AIR 0 0 0 no_logical_volume norot dead -1
+/musr/command visattributes log_World invisible
+
+/musr/command construct GPDcollimator GPD1 40 15 60 59 60.01 0 360 0 59 0 2.5 6 G4_Cu 0 0 0 log_World rot0 dead 1
+/musr/command visattributes log_GPD1 lightblue
+
+/run/initialize
+/control/execute vis.mac

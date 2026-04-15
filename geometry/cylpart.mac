@@ -1,0 +1,19 @@
+/musr/command construct box World 400 250 250 G4_AIR 0 0 0 no_logical_volume norot dead -1
+/musr/command visattributes log_World invisible
+
+# reference
+/musr/command construct cylpart CP_ref 0 20 40 8 G4_Al -100 0 0 log_World norot dead 1
+/musr/command visattributes log_CP_ref lightblue
+
+# larger radius
+/musr/command construct cylpart CP_r 0 30 40 8 G4_Al 0 0 0 log_World norot dead 2
+/musr/command visattributes log_CP_r yellow
+
+# deeper / shallower cut
+/musr/command construct cylpart CP_cut1 0 20 40 4 G4_Al 100 60 0 log_World norot dead 3
+/musr/command construct cylpart CP_cut2 0 20 40 15 G4_Al 100 -60 0 log_World norot dead 4
+/musr/command visattributes log_CP_cut1 red
+/musr/command visattributes log_CP_cut2 magenta
+
+/run/initialize
+/control/execute vis.mac
