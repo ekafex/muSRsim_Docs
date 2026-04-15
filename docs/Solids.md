@@ -114,35 +114,49 @@ These are **custom shapes** (less standardized, parameters follow internal imple
 ### **9. uprofile**
 
 ```text
-uprofile x1 x2 x3 x4
+uprofile hx hy hz w
 ```
 
 U-shaped bar geometry
 
-* `x1` outer size in one transverse direction
-* `x2` outer size in the other transverse direction
-* `x3` full length of the bar
-* `x4` wall thickness. 
+* `hx`, `hy`, `hz` are  half-lengths along x, y and z directions, respectively.
+* `w` wall thickness. 
 
 ---
 
 ### **10. alcSupportPlate**
 
 ```text
-alcSupportPlate (...)
+alcSupportPlate x1 x2 x3 x4
 ```
 
-* Specific geometry for ALC setup
+Specific geometry for ALC setup (legacy instrument)
+
+* `x1` large plate width
+* `x2` vertical offset between the large plate and the small block
+* `x3` and `x4` show no visible effect in geometry in tested 
+
+*musrSim version 1.0.5 for Geant4.10.3, released on 20 Mar 2017*
+
+>   In the tested musrSim version, alcSupportPlate behaves as if only x1 and x2 are active geometric parameters. x3 and x4 appear ineffective, at least at the visualization and solid-construction level accessible from the macro.
 
 ---
 
 ### **11. tubsbox**
 
 ```text
-tubsbox (...)
+tubsbox hbox rin rout hz theta
 ```
 
-* Cylinder with rectangular hole
+Cylinder with rectangular hole
+
+* `hbox` box half-width
+* `rin` tube inner radius
+* `rout` tube outer radius
+* `hz` tube  half-length in z
+* `theta` tube angular span parameter associated with the tube definition
+
+
 
 ---
 

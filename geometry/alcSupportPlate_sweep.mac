@@ -1,0 +1,57 @@
+# =========================================================
+# alcSupportPlate parameter sweep
+# Reference + one-parameter variations
+# =========================================================
+
+/musr/command rotation rotme 0 0 0
+
+# -------------------------
+# World
+# -------------------------
+/musr/command construct box World 400 300 300 G4_AIR 0 0 0 no_logical_volume norot dead -1
+/musr/command visattributes log_World invisible
+
+# =========================================================
+# Reference geometry
+# name   x1  x2  x3  x4
+# =========================================================
+/musr/command construct alcSupportPlate ASP_ref   40  5  20  10 G4_Al -180   0   0 log_World rotme dead 1
+/musr/command visattributes log_ASP_ref lightblue
+
+# =========================================================
+# Sweep x1 -- width of the big plate in the x direction
+# =========================================================
+/musr/command construct alcSupportPlate ASP_x1lo  20  5  20  10 G4_Al  -60   0   0 log_World rotme dead 2
+/musr/command construct alcSupportPlate ASP_x1hi  80  5  20  10 G4_Al   60   0   0 log_World rotme dead 3
+/musr/command visattributes log_ASP_x1lo yellow
+/musr/command visattributes log_ASP_x1hi yellow
+
+# =========================================================
+# Sweep x2 - vertical offset between two plates small and large
+# =========================================================
+/musr/command construct alcSupportPlate ASP_x2lo  40 -20  20  10 G4_Al -180 100   0 log_World rotme dead 4
+/musr/command construct alcSupportPlate ASP_x2hi  40  30  20  10 G4_Al -180 -100  0 log_World rotme dead 5
+/musr/command visattributes log_ASP_x2lo green
+/musr/command visattributes log_ASP_x2hi green
+
+# =========================================================
+# Sweep x3
+# =========================================================
+/musr/command construct alcSupportPlate ASP_x3lo  40  5   1  10 G4_Al  -60 100   0 log_World rotme dead 6
+/musr/command construct alcSupportPlate ASP_x3hi  40  5 200  10 G4_Al  -60 -100  0 log_World rotme dead 7
+/musr/command visattributes log_ASP_x3lo red
+/musr/command visattributes log_ASP_x3hi red
+
+# =========================================================
+# Sweep x4
+# =========================================================
+/musr/command construct alcSupportPlate ASP_x4lo  40  5  20    1 G4_Al   60 100   0 log_World rotme dead 8
+/musr/command construct alcSupportPlate ASP_x4hi  40  5  20  200 G4_Al   60 -100  0 log_World rotme dead 9
+/musr/command visattributes log_ASP_x4lo magenta
+/musr/command visattributes log_ASP_x4hi magenta
+
+# -------------------------
+# Initialize and show
+# -------------------------
+/run/initialize
+/control/execute vis.mac
