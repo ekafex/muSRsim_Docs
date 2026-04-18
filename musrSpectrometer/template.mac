@@ -1,0 +1,282 @@
+############################################################
+# musrSim generic muSR spectrometer template
+#
+# Purpose:
+#   A clean starting point for a standard muSR setup:
+#
+#      beam --> M0 --> collimator --> sample(Target)
+#                               --> Forward detectors
+#                               --> Backward detectors
+#                               --> Left/Right veto or aux detectors
+#
+# Notes:
+# - Dimensions below are mostly HALF-LENGTHS, as in Geant4.
+# - World must be called "World".
+# - Target should be called "Target" if you want muTarget* saved.
+# - M0 should be called "M0" if you want muM0* saved.
+# - Sensitive detectors currently use "musr/ScintSD".
+# - Passive pieces use "dead".
+# - Mother volumes must be defined before daughters.
+############################################################
+
+
+############################################################
+# 0. OUTPUT / GENERAL RUN CONTROL
+############################################################
+
+/musr/command rootOutputDirectoryName data
+
+# Save only events that produce at least one detector hit
+/musr/command storeOnlyEventsWithHits true
+
+# Merge deposits within same detector inside this time window
+/musr/command signalSeparationTime 5 ns
+
+# Runtime / tracking protection
+/musr/command maximumNrOfStepsPerTrack 20000
+/musr/command maximumTimePerEvent 60
+/musr/command maximumRunTimeAllowed 80000
+
+
+############################################################
+# 1. GEOMETRY
+############################################################
+# Geometry command form:
+# /musr/command construct solid name dimensions material x y z mother rot sensitive id
+#
+# Supported built-in solids include box, tubs, cons, trd, sphere,
+# para, polyconeA, polyconeB, plus musrSim-specific shapes.
+
+
+########################
+# 1.1 Rotations
+########################
+
+# Identity is "norot". Only define extra rotations if needed.
+/musr/command rotation rotY90 0 90 0
+/musr/command rotation rotX90 90 0 0
+
+
+########################
+# 1.2 World
+########################
+
+# BOX: halfX halfY halfZ
+/musr/command construct box World 1000 1000 1500 Air 0 0 0 no_logical_volume norot dead 0
+
+
+########################
+# 1.3 Beam pipe / vacuum channel
+########################
+
+# TUBS: rMin rMax halfZ phiStart phiTotal
+/musr/command construct tubs BeamPipeVac 0 20 800 0 360 Vacuum 0 0 0 World norot dead 100
+/musr/command construct tubs BeamPipeWall 20 22 800 0 360 Steel 0 0 0 World norot dead 101
+
+
+########################
+# 1.4 Upstream trigger detector M0
+########################
+
+# Special name M0 -> muM0* variables stored automatically
+/musr/command construct box M0 10 10 1 Scintillator 0 0 -300 World norot musr/ScintSD 1
+
+
+########################
+# 1.5 Save plane for beam diagnostics
+########################
+
+# Special name beginning with "save" records passage information
+# even without energy deposition.
+/musr/command construct box saveBeamBeforeSample 25 25 0.1 Vacuum 0 0 -20 World norot dead 2
+
+
+########################
+# 1.6 Collimator block
+########################
+
+# Simple passive lead collimator
+/musr/command construct box CollimatorBody 50 50 15 G4_Pb 0 0 -120 World norot dead 110
+
+# Aperture guide region (placeholder, not true subtraction geometry)
+/musr/command construct box CollimatorHoleGuide 5 10 16 Vacuum 0 0 -120 World norot dead 111
+
+
+########################
+# 1.7 Sample holder / cryostat placeholder
+########################
+
+/musr/command construct tubs SampleHolder 6 15 20 0 360 G4_Cu 0 0 0 World norot dead 120
+
+
+########################
+# 1.8 Sample
+########################
+
+# Special name Target -> muTarget* variables stored automatically
+/musr/command construct tubs Target 0 5 7 0 360 G4_Cu 0 0 0 World norot dead 10
+
+
+########################
+# 1.9 Positron detector banks
+########################
+
+# Forward bank (+z)
+/musr/command construct box FwdTop 10 25 2 Scintillator 0 25 120 World norot musr/ScintSD 20
+/musr/command construct box FwdBottom 10 25 2 Scintillator 0 -25 120 World norot musr/ScintSD 21
+/musr/command construct box FwdLeft 25 10 2 Scintillator -25 0 120 World norot musr/ScintSD 22
+/musr/command construct box FwdRight 25 10 2 Scintillator 25 0 120 World norot musr/ScintSD 23
+
+# Backward bank (-z)
+/musr/command construct box BwdTop 10 25 2 Scintillator 0 25 -120 World norot musr/ScintSD 30
+/musr/command construct box BwdBottom 10 25 2 Scintillator 0 -25 -120 World norot musr/ScintSD 31
+/musr/command construct box BwdLeft 25 10 2 Scintillator -25 0 -120 World norot musr/ScintSD 32
+/musr/command construct box BwdRight 25 10 2 Scintillator 25 0 -120 World norot musr/ScintSD 33
+
+
+########################
+# 1.10 Side veto / auxiliary detectors
+########################
+
+/musr/command construct box LeftVeto 2 40 40 Scintillator -120 0 0 World norot musr/ScintSD 40
+/musr/command construct box RightVeto 2 40 40 Scintillator 120 0 0 World norot musr/ScintSD 41
+
+
+############################################################
+# 2. REGIONS / CUTS
+############################################################
+# Use regions to tighten production cuts in selected parts.
+
+/musr/command region define sampleRegion log_Target
+/musr/command region setProductionCut sampleRegion 0.1 0.1 0.1
+
+/musr/command region define detectorRegion log_FwdTop
+/musr/command region define detectorRegion log_FwdBottom
+/musr/command region define detectorRegion log_FwdLeft
+/musr/command region define detectorRegion log_FwdRight
+/musr/command region define detectorRegion log_BwdTop
+/musr/command region define detectorRegion log_BwdBottom
+/musr/command region define detectorRegion log_BwdLeft
+/musr/command region define detectorRegion log_BwdRight
+/musr/command region setProductionCut detectorRegion 0.1 0.1 0.1
+
+
+############################################################
+# 3. FIELDS
+############################################################
+# Uniform field syntax:
+# /musr/command globalfield name halfX halfY halfZ uniform X Y Z logicalVolume Bx By Bz Ex Ey Ez
+
+# Longitudinal B field centered on sample
+/musr/command globalfield BzMain 300 300 300 uniform 0 0 0 World 0 0 0.03 0 0 0
+
+# Debug field checks if needed
+#/musr/command globalfield printFieldValueAtPoint 0 0 0
+
+
+############################################################
+# 4. PHYSICS
+############################################################
+
+# Muon ionization
+/musr/command process addProcess mu+ G4MuIonisation -1 -1 1
+
+# Muon multiple scattering
+/musr/command process addProcess mu+ G4MuMultipleScattering -1 1 1
+
+# Positron processes
+/musr/command process addProcess e+ G4eMultipleScattering -1 1 1
+/musr/command process addProcess e+ G4eIonisation -1 2 2
+/musr/command process addProcess e+ G4eBremsstrahlung -1 -1 3
+
+# Optional low-energy muSR-specific processes
+# /musr/command process addProcess mu+ musrMuFormation -1 -1 2
+# /musr/command process addProcess mu+ musrMuEnergyLossLandau -1 -1 1
+
+
+############################################################
+# 5. PRIMARY GENERATION (GUN)
+############################################################
+
+/gun/primaryparticle mu+
+
+# Mean starting point upstream of M0
+/gun/vertex 0 0 -500 mm
+
+# Gaussian x/y beam spot, no z smearing
+/gun/vertexsigma 5 5 0 mm
+
+# Forward beam direction
+/gun/direction 0 0 1
+
+# Mean momentum and bite
+/gun/momentum 28 MeV
+/gun/momentumsmearing 1 MeV
+
+# Muon polarization along +z
+/gun/muonPolarizVector 0 0 1
+/gun/muonPolarizFraction 1.0
+
+# Continuous beam timing spacing
+/gun/meanarrivaltime 33.33333 microsecond
+
+
+############################################################
+# 6. NUMERICAL / ENGINE CONTROLS
+############################################################
+
+# Field stepping accuracy
+/musr/command globalfield setparameter SetLargestAcceptableStep 0.5
+
+# Optional fine stepping in target region.
+# StepLimiter must be added before SetUserLimits if you use it.
+# /musr/command process addProcess mu+ G4StepLimiter -1 -1 5
+# /musr/command SetUserLimits log_Target 0.05 0 0 0 0
+
+
+############################################################
+# 7. EVENT FILTERING / STORAGE POLICY
+############################################################
+
+# Uncomment to keep only events with hit in one detector
+# /musr/command storeOnlyEventsWithHitInDetID 20
+
+# Debug-only shortcuts
+# /musr/command storeOnlyTheFirstTimeHit true
+# /musr/command killAllPositrons true
+# /musr/command killAllElectrons true
+# /musr/command killAllGammas true
+
+
+############################################################
+# 8. ROOT OUTPUT SELECTION
+############################################################
+# Keep defaults for initial validation.
+# Examples:
+# /musr/command rootOutput muDecayPolX off
+# /musr/command rootOutput fieldNomVal on
+
+
+############################################################
+# 9. VISUALIZATION ATTRIBUTES (OPTIONAL)
+############################################################
+
+/musr/command visattributes log_M0 red
+/musr/command visattributes log_Target yellow
+/musr/command visattributes log_FwdTop blue
+/musr/command visattributes log_FwdBottom blue
+/musr/command visattributes log_FwdLeft blue
+/musr/command visattributes log_FwdRight blue
+/musr/command visattributes log_BwdTop green
+/musr/command visattributes log_BwdBottom green
+/musr/command visattributes log_BwdLeft green
+/musr/command visattributes log_BwdRight green
+/musr/command visattributes log_LeftVeto magenta
+/musr/command visattributes log_RightVeto magenta
+
+
+############################################################
+# 10. RUN
+############################################################
+
+/run/beamOn 10000

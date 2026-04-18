@@ -27,7 +27,7 @@ For daughter volumes:
 
 # 1. Standard Geant4 solids
 
-These follow the usual Geant4 parameter meanings.
+These follow the usual Geant4 parameter meanings. List of all Geant4 solids can be found [here](https://geant4.web.cern.ch/documentation/pipelines/master/bfad_html/ForApplicationDevelopers/Detector/Geometry/geomSolids.html#constructed-solid-geometry-csg-solids).
 
 ## 1. `box`
 

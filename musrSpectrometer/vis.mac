@@ -1,0 +1,41 @@
+############################################################
+# Visualization macro for template_muSR_spectrometer.mac
+#
+# Usage pattern:
+#   musrSim 1001.mac
+# where 1001.mac contains:
+#   /control/execute template_muSR_spectrometer.mac
+#   /control/execute template_muSR_spectrometer_vis.mac
+#
+# Adapt the viewer choice to your Geant4 build.
+############################################################
+
+# Disable trajectory clutter for pure geometry inspection
+/vis/disable false
+
+# Choose one viewer that exists in your build.
+# Common options include OGL, OGLIQt, DAWNFILE.
+/vis/open OGLIQt 1200x900-0+0
+
+/vis/viewer/set/autoRefresh true
+/vis/viewer/set/background white
+
+# Draw the full geometry
+/vis/drawVolume
+
+# Surface style is usually more readable for layout checks
+/vis/viewer/set/style surface
+
+# Optional edge enhancement if supported
+#/vis/viewer/set/edge true
+
+# Camera / viewpoint
+/vis/viewer/set/viewpointThetaPhi 70 20 deg
+/vis/viewer/zoom 1.2
+
+# Add trajectories and hits only if you want event-level inspection
+#/tracking/storeTrajectory 1
+#/vis/scene/add/trajectories smooth
+#/vis/scene/add/hits
+
+/vis/viewer/flush
