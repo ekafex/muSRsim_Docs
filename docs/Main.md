@@ -1,3 +1,12 @@
+1.   [Macro File Structure](./Macro_Structure.md)
+2.   [Detector Construction](./Detector.md)
+     *   [Solids](./Solids.md)
+     *   [Solids Defined in `musrSim`](./Solids_DectorConstructFile.md)
+     *   [Materials.md](./Materials.md)
+3.   [Construct](./Construct.md)
+
+
+
 # List of muSR category commnads
 
 1. **Geometry / Detector Construction**
@@ -39,5 +48,4 @@
 
    * field integrals, detector hit structure, saved variables
    * (ROOT tree definitions) 
-
 
