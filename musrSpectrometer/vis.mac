@@ -15,19 +15,21 @@
 
 # Choose one viewer that exists in your build.
 # Common options include OGL, OGLIQt, DAWNFILE.
-/vis/open OGLIQt 1200x900-0+0
+/vis/open OGLIX 1200x900-0+0
 
-/vis/viewer/set/autoRefresh true
-/vis/viewer/set/background white
+#/vis/viewer/set/autoRefresh true
+/vis/viewer/set/background black
 
 # Draw the full geometry
 /vis/drawVolume
 
 # Surface style is usually more readable for layout checks
 /vis/viewer/set/style surface
+#/vis/viewer/set/style wireframe
 
 # Optional edge enhancement if supported
-#/vis/viewer/set/edge true
+/vis/viewer/set/edge true
+/vis/viewer/set/auxiliaryEdge true
 
 # Camera / viewpoint
 /vis/viewer/set/viewpointThetaPhi 70 20 deg
@@ -38,4 +40,6 @@
 #/vis/scene/add/trajectories smooth
 #/vis/scene/add/hits
 
+/vis/viewer/set/autoRefresh true
 /vis/viewer/flush
+

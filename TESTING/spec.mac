@@ -1,83 +1,21 @@
 ############################################################
-# musrSim generic muSR spectrometer template
-#
-# Purpose:
-#   A clean starting point for a standard muSR setup:
-#
-#      beam --> M0 --> collimator --> sample(Target)
-#                               --> Forward detectors
-#                               --> Backward detectors
-#                               --> Left/Right veto or aux detectors
-#
-# Notes:
-# - Dimensions below are mostly HALF-LENGTHS, as in Geant4.
-# - World must be called "World".
-# - Target should be called "Target" if you want muTarget* saved.
-# - M0 should be called "M0" if you want muM0* saved.
-# - Sensitive detectors currently use "musr/ScintSD".
-# - Passive pieces use "dead".
-# - Mother volumes must be defined before daughters.
-############################################################
-
-
-############################################################
-# 0. OUTPUT / GENERAL RUN CONTROL
-############################################################
-
-/musr/command rootOutputDirectoryName data
-
-# Save only events that produce at least one detector hit
-/musr/command storeOnlyEventsWithHits true
-
-# Merge deposits within same detector inside this time window
-/musr/command signalSeparationTime 5 ns
-
-# Runtime / tracking protection
-/musr/command maximumNrOfStepsPerTrack 20000
-/musr/command maximumTimePerEvent 60
-/musr/command maximumRunTimeAllowed 80000
-
-
-############################################################
 # 1. GEOMETRY
 ############################################################
-# Geometry command form:
-# /musr/command construct solid name dimensions material x y z mother rot sensitive id
-#
-# Supported built-in solids include box, tubs, cons, trd, sphere,
-# para, polyconeA, polyconeB, plus musrSim-specific shapes.
 
+# /musr/command rotation rotY90 0 90 0
 
-########################
-# 1.1 Rotations
-########################
-
-# Identity is "norot". Only define extra rotations if needed.
-/musr/command rotation rotY90 0 90 0
-/musr/command rotation rotX90 90 0 0
-
-
-########################
-# 1.2 World
-########################
-
-# BOX: halfX halfY halfZ
 /musr/command construct box World 1000 1000 1500 Air 0 0 0 no_logical_volume norot dead 0
 
 
-########################
-# 1.3 Beam pipe / vacuum channel
-########################
 
-# TUBS: rMin rMax halfZ phiStart phiTotal
-/musr/command construct tubs BeamPipeVac 0 20 800 0 360 Vacuum 0 0 0 log_World norot dead 100
-/musr/command construct tubs BeamPipeWall 20 22 800 0 360 Steel 0 0 0 log_World norot dead 101
+# 1.3 Beam pipe / vacuum channel
+
+/musr/command construct tubs BeamPipeVac 0 20 200 0 360 Vacuum 0 0 0 log_World norot dead 100
+/musr/command construct tubs BeamPipeWall 20 22 200 0 360 Steel 0 0 0 log_World norot dead 101
 
 
 ########################
 # 1.4 Upstream trigger detector M0
-########################
-
 # Special name M0 -> muM0* variables stored automatically
 /musr/command construct box M0 10 10 1 Scintillator 0 0 -300 log_World norot musr/ScintSD 1
 
@@ -148,7 +86,7 @@
 # Use regions to tighten production cuts in selected parts.
 
 /musr/command region define sampleRegion log_Target
-/musr/command region setProductionCut sampleRegion 0.1 0.1 0.1
+#/musr/command region setProductionCut sampleRegion 0.1 0.1 0.1
 
 /musr/command region define detectorRegion log_FwdTop
 /musr/command region define detectorRegion log_FwdBottom
@@ -198,40 +136,33 @@
 # 5. PRIMARY GENERATION (GUN)
 ############################################################
 
-/gun/primaryparticle mu+
-
-# Mean starting point upstream of M0
-/gun/vertex 0 0 -500 mm
-
-# Gaussian x/y beam spot, no z smearing
-/gun/vertexsigma 5 5 0 mm
-
-# Forward beam direction
-/gun/direction 0 0 1
-
-# Mean momentum and bite
-/gun/momentum 28 MeV
-/gun/momentumsmearing 1 MeV
-
-# Muon polarization along +z
-/gun/muonPolarizVector 0 0 1
-/gun/muonPolarizFraction 1.0
-
-# Continuous beam timing spacing
-/gun/meanarrivaltime 33.33333 microsecond
-
+#/gun/primaryparticle mu+
+## Mean starting point upstream of M0
+#/gun/vertex 0 0 -500 mm
+## Gaussian x/y beam spot, no z smearing
+#/gun/vertexsigma 5 5 0 mm
+## Forward beam direction
+#/gun/direction 0 0 1
+## Mean momentum and bite
+#/gun/momentum 28 MeV
+#/gun/momentumsmearing 1 MeV
+## Muon polarization along +z
+#/gun/muonPolarizVector 0 0 1
+#/gun/muonPolarizFraction 1.0
+## Continuous beam timing spacing
+#/gun/meanarrivaltime 33.33333 microsecond
 
 ############################################################
 # 6. NUMERICAL / ENGINE CONTROLS
 ############################################################
 
-# Field stepping accuracy
-/musr/command globalfield setparameter SetLargestAcceptableStep 0.5
-
-# Optional fine stepping in target region.
-# StepLimiter must be added before SetUserLimits if you use it.
-# /musr/command process addProcess mu+ G4StepLimiter -1 -1 5
-# /musr/command SetUserLimits log_Target 0.05 0 0 0 0
+## Field stepping accuracy
+#/musr/command globalfield setparameter SetLargestAcceptableStep 0.5
+#
+## Optional fine stepping in target region.
+## StepLimiter must be added before SetUserLimits if you use it.
+## /musr/command process addProcess mu+ G4StepLimiter -1 -1 5
+## /musr/command SetUserLimits log_Target 0.05 0 0 0 0
 
 
 ############################################################
@@ -282,4 +213,4 @@
 # 10. RUN
 ############################################################
 
-/run/beamOn 1
+#/run/beamOn 1

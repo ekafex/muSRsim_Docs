@@ -1,0 +1,6 @@
+
+/musr/command construct box World 1000 1000 1500 Air 0 0 0 no_logical_volume norot dead 0
+
+# Special name Target -> muTarget* variables stored automatically
+/musr/command construct tubs Target 0 5 7 0 360 G4_Cu 0 0 0 log_World norot dead 10
+
